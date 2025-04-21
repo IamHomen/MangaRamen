@@ -53,8 +53,8 @@ const MangaListing: React.FC<MangaListingProps> = ({ searchTerm }) => {
     <div className="container mx-auto py-10">
       <div className="flex justify-end items-center mb-4">
         <Select onValueChange={handleSortChange}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Sort by..." />
+          <SelectTrigger className="w-[200px]">
+            <SelectValue placeholder="Update" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="update">Update</SelectItem>
@@ -152,3 +152,4 @@ const MangaListing: React.FC<MangaListingProps> = ({ searchTerm }) => {
 export default MangaListing;
 
 import { CardFooter } from "@/components/ui/card";
+
