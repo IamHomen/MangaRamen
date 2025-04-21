@@ -233,6 +233,7 @@ const MangaDetailsPage = () => {
                       alt={relatedManga.title}
                       width={300}
                       height={400}
+                      style={{height: '400px'}}
                       className="w-full object-cover rounded-md"
                     />
                     <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-background to-transparent p-2">
