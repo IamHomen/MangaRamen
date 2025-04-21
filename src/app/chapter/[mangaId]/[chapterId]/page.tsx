@@ -33,7 +33,9 @@ const ChapterReaderPage = () => {
   }
 
   const getProxyImageUrl = (url: string) => {
-    return `https://homen-api.vercel.app/proxy-image?url=${encodeURIComponent(url)}`;
+    return `https://homen-api.vercel.app/proxy-image?url=${encodeURIComponent(
+      url
+    )}`;
   };
 
   const goToPreviousChapter = () => {
@@ -97,9 +99,9 @@ const ChapterReaderPage = () => {
               key={index}
               src={getProxyImageUrl(page.img)}
               alt={`Page ${page.page}`}
-              width={800}
+              width={600}
               height={1200}
-              className="w-11/12 object-contain mb-4 rounded-md"
+              className="w-11/12 object-contain rounded-md"
             />
           ))}
         </div>
