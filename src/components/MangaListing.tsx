@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Icons } from "@/components/icons";
 
 interface MangaListingProps {
   searchTerm: string;
@@ -102,7 +103,6 @@ const MangaListing: React.FC<MangaListingProps> = ({ searchTerm }) => {
               </CardDescription>
               {/* Rating */}
               <div className="flex items-center mt-1">
-                {/* Star Icons - you might need to use a custom component or library for stars */}
                 {[...Array(5)].map((_, index) => (
                   <svg
                     key={index}
@@ -152,4 +152,5 @@ const MangaListing: React.FC<MangaListingProps> = ({ searchTerm }) => {
 export default MangaListing;
 
 import { CardFooter } from "@/components/ui/card";
+
 
