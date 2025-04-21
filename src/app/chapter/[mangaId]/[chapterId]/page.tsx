@@ -4,6 +4,7 @@ import { getMangaChapterContent } from "@/services/asura-scans";
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
+import Header from "@/components/Header";
 
 const ChapterReaderPage = () => {
   const [chapterContent, setChapterContent] = useState(null);
@@ -32,10 +33,11 @@ const ChapterReaderPage = () => {
   };
 
   return (
-    <div className="container mx-auto py-10">
-      <h1 className="text-2xl font-bold mb-4">Chapter Reader</h1>
-      {chapterContent.chapterPages && Array.isArray(chapterContent.chapterPages) ? (
-        chapterContent.chapterPages.map((page, index) => (
+    <div>
+      <Header />
+      <div className="container mx-auto py-10">
+        <h1 className="text-2xl font-bold mb-4">Chapter Reader</h1>
+        {chapterContent.chapterPages.map((page, index) => (
           <Image
             key={index}
             src={getProxyImageUrl(page.img)}
@@ -44,10 +46,8 @@ const ChapterReaderPage = () => {
             height={1200}
             className="w-full object-contain mb-4 rounded-md"
           />
-        ))
-      ) : (
-        <div>No images to display.</div>
-      )}
+        ))}
+      </div>
     </div>
   );
 };

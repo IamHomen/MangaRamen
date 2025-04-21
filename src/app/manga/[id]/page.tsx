@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Bookmark } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import Header from "@/components/Header";
 
 const MangaDetailsPage = () => {
   const [mangaDetails, setMangaDetails] = useState(null);
@@ -83,16 +84,7 @@ const MangaDetailsPage = () => {
 
   return (
     <div>
-      {/* Header Section */}
-      <header
-        className="bg-background border-b border-border py-4 cursor-pointer"
-        onClick={handleHomeClick}
-      >
-        <div className="container mx-auto">
-          <div className="text-lg font-bold">Manga Ramen</div>
-        </div>
-      </header>
-
+       <Header />
       {/* Banner Section */}
       <div className="relative w-full h-64 md:h-96">
         <Image
