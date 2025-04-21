@@ -99,9 +99,10 @@ const ChapterReaderPage = () => {
               key={index}
               src={getProxyImageUrl(page.img)}
               alt={`Page ${page.page}`}
-              width={600}
+              width={800}
               height={1200}
-              className="w-11/12 object-contain"
+              style={{ objectFit: "contain" }}
+              className="object-contain"
             />
           ))}
         </div>
