@@ -1,5 +1,6 @@
-// components/MangaSearchResults.tsx
-import { useSearchParams } from "next/navigation"; // Ensure this is imported from the correct Next.js package
+"use client"; // Add this directive at the top of the file
+
+import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 
 function MangaSearchResultsContent() {
