@@ -138,14 +138,6 @@ const MangaDetailsPage = () => {
           <div className="md:col-span-3">
             <h1 className="text-3xl font-bold mb-2">{mangaDetails.title}</h1>
 
-            {/* Social Sharing Buttons (Placeholder) */}
-            <div className="flex space-x-2 mb-4">
-              <Button variant="outline">Facebook</Button>
-              <Button variant="outline">Twitter</Button>
-              <Button variant="outline">WhatsApp</Button>
-              <Button variant="outline">Pinterest</Button>
-            </div>
-
             {/* Synopsis */}
             <h2 className="text-2xl font-bold mb-2">Synopsis</h2>
             <p className="mb-4">{mangaDetails.synopsis}</p>
@@ -169,13 +161,13 @@ const MangaDetailsPage = () => {
         <div className="mt-8">
           <h2 className="text-2xl font-bold mb-4">Chapters</h2>
 
-          <div className="flex space-x-4 mb-4">
+          <div className="flex justify-between mb-4">
             {mangaDetails.chapters.length > 0 && (
               <Link
                 href={`/chapter/${mangaDetails.id}/${mangaDetails.chapters[mangaDetails.chapters.length - 1].chapter_id}`}
                 passHref
               >
-                <Button variant="secondary">
+                <Button variant="secondary" style={{ backgroundColor: 'green' }}>
                   First Chapter {mangaDetails.chapters[mangaDetails.chapters.length - 1].name}
                 </Button>
               </Link>
@@ -185,7 +177,7 @@ const MangaDetailsPage = () => {
                 href={`/chapter/${mangaDetails.id}/${mangaDetails.chapters[0].chapter_id}`}
                 passHref
               >
-                <Button variant="secondary">
+                <Button variant="secondary" style={{ backgroundColor: 'green' }}>
                   New Chapter {mangaDetails.chapters[0].name}
                 </Button>
               </Link>
