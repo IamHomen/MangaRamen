@@ -34,16 +34,20 @@ const ChapterReaderPage = () => {
   return (
     <div className="container mx-auto py-10">
       <h1 className="text-2xl font-bold mb-4">Chapter Reader</h1>
-      {chapterContent.images.map((imageUrl, index) => (
-        <Image
-          key={index}
-          src={getProxyImageUrl(imageUrl)}
-          alt={`Page ${index + 1}`}
-          width={800}
-          height={1200}
-          className="w-full object-contain mb-4 rounded-md"
-        />
-      ))}
+      {chapterContent.chapterPages && Array.isArray(chapterContent.chapterPages) ? (
+        chapterContent.chapterPages.map((page, index) => (
+          <Image
+            key={index}
+            src={getProxyImageUrl(page.img)}
+            alt={`Page ${page.page}`}
+            width={800}
+            height={1200}
+            className="w-full object-contain mb-4 rounded-md"
+          />
+        ))
+      ) : (
+        <div>No images to display.</div>
+      )}
     </div>
   );
 };
