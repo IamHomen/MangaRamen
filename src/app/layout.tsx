@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'AsuraReader',
+  title: 'Manga Ramen',
   description: 'Read manga from AsuraScans',
 };
 

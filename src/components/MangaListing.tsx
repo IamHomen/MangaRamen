@@ -1,18 +1,20 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
 import { getSortedManga, Manga } from "@/services/asura-scans";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
-const MangaListing = () => {
+interface MangaListingProps {
+  searchTerm: string;
+}
+
+const MangaListing: React.FC<MangaListingProps> = ({ searchTerm }) => {
   const [mangaList, setMangaList] = useState<Manga[]>([]);
   const [sortOrder, setSortOrder] = useState("update");
-  const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const router = useRouter();
 
@@ -30,24 +32,14 @@ const MangaListing = () => {
     setCurrentPage(1); // Reset to first page when sorting changes
   };
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-  };
-
-  // TODO: Implement search functionality with debounce
+  // Implement search functionality with existing data
   const searchedManga = mangaList.filter((manga) =>
     manga.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <div className="container mx-auto py-10">
-      <div className="flex justify-between items-center mb-4">
-        <Input
-          type="text"
-          placeholder="Search manga..."
-          value={searchTerm}
-          onChange={handleSearchChange}
-        />
+      <div className="flex justify-end items-center mb-4">
         <Select onValueChange={handleSortChange}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Sort by..." />
@@ -71,9 +63,11 @@ const MangaListing = () => {
               </CardDescription>
             </CardHeader>
             <CardContent className="p-0">
-              <img
+              <Image
                 src={manga.cover}
                 alt={manga.title}
+                width={300}
+                height={200}
                 className="w-full h-48 object-cover rounded-md"
               />
             </CardContent>
