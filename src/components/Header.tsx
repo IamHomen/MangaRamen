@@ -9,28 +9,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 
-interface HeaderProps {
-  onSearchChange: (searchTerm: string) => void;
-}
+interface HeaderProps {}
 
-const Header: React.FC<HeaderProps> = ({ onSearchChange }) => {
+const Header: React.FC<HeaderProps> = ({}) => {
   const [searchTerm, setSearchTerm] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    onSearchChange(searchTerm);
-  }, [searchTerm, onSearchChange]);
+  const router = useRouter();
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
-  };
-
-  const handleSubmit = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      onSearchChange(searchTerm);
-    }
+    const query = event.target.value;
+    router.push(`/?keyw=${query}`);
   };
 
   return (
@@ -44,7 +35,6 @@ const Header: React.FC<HeaderProps> = ({ onSearchChange }) => {
             placeholder="Search manga..."
             value={searchTerm}
             onChange={handleSearchChange}
-            onKeyDown={handleSubmit}
             className="max-w-md sm:w-64"
             ref={inputRef}
           />

@@ -2,26 +2,41 @@
 
 import { useState, useEffect } from "react";
 import { getSortedManga, Manga } from "@/services/asura-scans";
-import { Card, CardContent, CardDescription, CardFooter, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardTitle,
+  CardFooter,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useRouter } from "next/navigation";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
 
 interface MangaListingProps {
-  searchTerm: string;
+  // searchTerm: string;
 }
 
-const MangaListing: React.FC<MangaListingProps> = ({ searchTerm }) => {
+const MangaListing: React.FC<MangaListingProps> = ({}) => {
   const [mangaList, setMangaList] = useState<Manga[]>([]);
   const [sortOrder, setSortOrder] = useState("update");
   const [currentPage, setCurrentPage] = useState(1);
   const router = useRouter();
   const [totalPages, setTotalPages] = useState(1); // Add totalPages state
   const [selectedSort, setSelectedSort] = useState("update");
+
+  const searchParams = useSearchParams();
+  const searchTerm = searchParams.get("keyw") || "";
 
   useEffect(() => {
     const fetchManga = async () => {
@@ -71,27 +86,35 @@ const MangaListing: React.FC<MangaListingProps> = ({ searchTerm }) => {
     // Add filled stars
     for (let i = 0; i < filledStars; i++) {
       stars.push(
-        <Icons.starFilled key={`filled_${i}`} className="h-4 w-4 text-yellow-500 fill-current" />
+        <Icons.starFilled
+          key={`filled_${i}`}
+          className="h-4 w-4 text-yellow-500 fill-current"
+        />
       );
     }
 
     // Add half star if applicable
     if (hasHalfStar && filledStars < maxStars) {
       stars.push(
-        <Icons.starHalf key="half" className="h-4 w-4 text-yellow-500 fill-current" />
+        <Icons.starHalf
+          key="half"
+          className="h-4 w-4 text-yellow-500 fill-current"
+        />
       );
     }
 
     // Add empty stars to fill the remaining space
     for (let i = stars.length; i < maxStars; i++) {
       stars.push(
-        <Icons.star key={`empty_${i}`} className="h-4 w-4 text-yellow-500 fill-current" />
+        <Icons.star
+          key={`empty_${i}`}
+          className="h-4 w-4 text-yellow-500 fill-current"
+        />
       );
     }
 
     return stars;
   };
-
 
   return (
     <div className="container mx-auto py-10">
@@ -116,7 +139,10 @@ const MangaListing: React.FC<MangaListingProps> = ({ searchTerm }) => {
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {mangaList.map((manga) => (
-            <Card key={manga.id} className="bg-background border-border rounded-md shadow-sm flex flex-col">
+            <Card
+              key={manga.id}
+              className="bg-background border-border rounded-md shadow-sm flex flex-col"
+            >
               <div className="relative">
                 {/* Status Badge */}
                 <Badge
@@ -144,7 +170,9 @@ const MangaListing: React.FC<MangaListingProps> = ({ searchTerm }) => {
               </div>
               <CardContent className="p-2 flex flex-col flex-grow">
                 {/* Manga Title */}
-                <CardTitle className="text-sm font-semibold line-clamp-1">{manga.title}</CardTitle>
+                <CardTitle className="text-sm font-semibold line-clamp-1">
+                  {manga.title}
+                </CardTitle>
                 {/* Latest Chapter */}
                 <CardDescription className="text-xs text-muted-foreground line-clamp-1">
                   Chapter: {manga.latest_chapter}
@@ -152,7 +180,9 @@ const MangaListing: React.FC<MangaListingProps> = ({ searchTerm }) => {
                 {/* Rating */}
                 <div className="flex items-center mt-1">
                   {renderRatingStars(manga.rating)}
-                  <span className="text-xs text-muted-foreground ml-1">{manga.rating}</span>
+                  <span className="text-xs text-muted-foreground ml-1">
+                    {manga.rating}
+                  </span>
                 </div>
               </CardContent>
               <CardFooter className="p-2">
@@ -189,4 +219,3 @@ const MangaListing: React.FC<MangaListingProps> = ({ searchTerm }) => {
 };
 
 export default MangaListing;
-import { Star, StarHalf } from "lucide-react";
