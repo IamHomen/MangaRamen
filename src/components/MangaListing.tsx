@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
 import React from "react";
+import Link from "next/link";
 
 interface MangaListingProps {
   // searchTerm: string;
@@ -44,15 +45,16 @@ const MangaListing: React.FC<MangaListingProps> = ({}) => {
     const fetchManga = async () => {
       const fetchData = async () => {
         try {
+          let data;
           if (searchTerm) {
-            const data = await getSortedManga(sortOrder, currentPage);
+            data = await getSortedManga(sortOrder, currentPage);
             const searchedManga = data.results.filter((manga) =>
               manga.title.toLowerCase().includes(searchTerm.toLowerCase())
             );
             setMangaList(searchedManga);
             setTotalPages(data.hasNextPage ? currentPage + 1 : currentPage);
           } else {
-            const data = await getSortedManga(sortOrder, currentPage);
+            data = await getSortedManga(sortOrder, currentPage);
             setMangaList(data.results);
             setTotalPages(data.hasNextPage ? currentPage + 1 : currentPage);
           }
@@ -91,8 +93,6 @@ const MangaListing: React.FC<MangaListingProps> = ({}) => {
     const maxStars = 5; // Total number of stars
 
     const stars = [];
-
-    // Add filled stars
     for (let i = 0; i < maxStars; i++) {
       if (i < filledStars) {
         stars.push(
@@ -148,52 +148,52 @@ const MangaListing: React.FC<MangaListingProps> = ({}) => {
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {mangaList.map((manga) => (
-            <Card
-              key={manga.id}
-              className="bg-background border-border rounded-md shadow-sm flex flex-col"
-            >
-              <div className="relative">
-                {/* Status Badge */}
-                <Badge
-                  variant="secondary"
-                  className="absolute top-2 left-2 z-10 rounded-full px-2 py-0.5 text-xs font-bold uppercase"
-                >
-                  {manga.status}
-                </Badge>
-                {/* Manga Cover Image */}
-
-                <Image
+            <Link key={manga.id} href={`/manga/${manga.id}`} passHref>
+              <Card
+                className="bg-background border-border rounded-md shadow-sm flex flex-col cursor-pointer"
+              >
+                <div className="relative">
+                  {/* Status Badge */}
+                  <Badge
+                    variant="secondary"
+                    className="absolute top-2 left-2 z-10 rounded-full px-2 py-0.5 text-xs font-bold uppercase"
+                  >
+                    {manga.status}
+                  </Badge>
+                  {/* Manga Cover Image */}
+                  <Image
                     src={getProxyImageUrl(manga.cover)}
                     alt={manga.title}
                     width={300}
                     height={400}
                     className="aspect-[3/4] w-full object-cover rounded-t-md"
                   />
-              </div>
-              <CardContent className="p-2 flex flex-col flex-grow">
-                {/* Manga Title */}
-                <CardTitle className="text-sm font-semibold line-clamp-1">
-                  {manga.title}
-                </CardTitle>
-                {/* Latest Chapter */}
-                <CardDescription className="text-xs text-muted-foreground line-clamp-1">
-                  Chapter: {manga.latest_chapter}
-                </CardDescription>
-                {/* Rating */}
-                <div className="flex items-center mt-1">
-                  {renderRatingStars(manga.rating)}
-                  <span className="text-xs text-muted-foreground ml-1">
-                    {manga.rating}
-                  </span>
                 </div>
-              </CardContent>
-              <CardFooter className="p-2">
-                {/* Type Badge */}
-                <Badge variant="outline" className="text-[0.6rem]">
-                  {manga.type}
-                </Badge>
-              </CardFooter>
-            </Card>
+                <CardContent className="p-2 flex flex-col flex-grow">
+                  {/* Manga Title */}
+                  <CardTitle className="text-sm font-semibold line-clamp-1">
+                    {manga.title}
+                  </CardTitle>
+                  {/* Latest Chapter */}
+                  <CardDescription className="text-xs text-muted-foreground line-clamp-1">
+                    Chapter: {manga.latest_chapter}
+                  </CardDescription>
+                  {/* Rating */}
+                  <div className="flex items-center mt-1">
+                    {renderRatingStars(manga.rating)}
+                    <span className="text-xs text-muted-foreground ml-1">
+                      {manga.rating}
+                    </span>
+                  </div>
+                </CardContent>
+                <CardFooter className="p-2">
+                  {/* Type Badge */}
+                  <Badge variant="outline" className="text-[0.6rem]">
+                    {manga.type}
+                  </Badge>
+                </CardFooter>
+              </Card>
+            </Link>
           ))}
         </div>
       )}
