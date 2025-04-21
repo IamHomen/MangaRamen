@@ -193,7 +193,7 @@ const MangaDetailsPage = () => {
             onChange={(e) => setSearchChapter(e.target.value)}
             className="mb-4"
           />
-          <ScrollArea className="max-h-64">
+          <ScrollArea className="max-h-[400px]">
             <ul>
               {filteredChapters.map((chapter) => (
                 <li key={chapter.chapter_id} className="py-2 border-b border-border">
