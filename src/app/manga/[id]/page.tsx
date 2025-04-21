@@ -101,7 +101,7 @@ const MangaDetailsPage = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent"></div>
       </div>
 
-      <div className="container mx-auto py-10">
+      <div className="container mx-auto py-10 px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {/* Manga Cover and Details */}
           <div className="md:col-span-1">

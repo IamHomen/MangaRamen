@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <div>
       <Header />
-      <div className="container mx-auto py-10">
+      <div className="container mx-auto py-10 px-4">
         <MangaListing />
       </div>
     </div>

@@ -35,7 +35,7 @@ const ChapterReaderPage = () => {
   return (
     <div>
       <Header />
-      <div className="container mx-auto py-10">
+      <div className="container mx-auto py-10 px-4">
         <h1 className="text-2xl font-bold mb-4">Chapter Reader</h1>
         {chapterContent.chapterPages && chapterContent.chapterPages.map((page, index) => (
           <Image
