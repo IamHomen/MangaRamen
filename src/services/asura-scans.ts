@@ -113,6 +113,7 @@ export interface Chapter {
  * Represents detailed information about a manga.
  */
 export interface MangaDetails {
+  id: any;
   /**
    * The title of the manga.
    */
@@ -189,9 +190,37 @@ export async function getMangaDetails(id: string): Promise<MangaDetails> {
  */
 export interface ChapterContent {
   /**
-   * The URLs of the images in the chapter.
+   * The ID of the chapter.
    */
-  images: string[];
+  id?: string;
+  /**
+   * The title of the chapter.
+   */
+  title: string;
+  /**
+   * The current chapter number.
+   */
+  currentChapterNumber: number;
+  /**
+   * The ID of the previous chapter.
+   */
+  prevChapterId?: string;
+  /**
+   * The ID of the next chapter.
+   */
+  nextChapterId?: string;
+  /**
+   * Indicates if there is a previous page.
+   */
+  hasPrevPage: boolean;
+  /**
+   * Indicates if there is a next page.
+   */
+  hasNextPage: boolean;
+  /**
+   * The pages of the chapter.
+   */
+  chapterPages: { img: string; page: number }[];
 }
 
 /**
@@ -204,9 +233,24 @@ export interface ChapterContent {
 export async function getMangaChapterContent(
   id: string,
   chapterId: string
-): Promise<ChapterContent> {
+): Promise<Omit<ChapterContent, 'id'>> {
   const url = `${BASE_URL}/manga/asurascans/chapters/${id}/${chapterId}`;
   const response = await fetch(url);
-  const data: ChapterContent = await response.json();
-  return data;
+  const data: { images: string[] } = await response.json();
+
+  // Map the images to the chapterPages format
+  const chapterPages = data.images.map((img, index) => ({
+    img,
+    page: index + 1,
+  }));
+
+  return {
+    title: "Chapter Title", // Dummy value
+    currentChapterNumber: 1, // Dummy value
+    prevChapterId: undefined, // Dummy value
+    nextChapterId: undefined, // Dummy value
+    hasPrevPage: false, // Dummy value
+    hasNextPage: false, // Dummy value
+    chapterPages,
+  };
 }
