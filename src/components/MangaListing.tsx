@@ -21,6 +21,7 @@ const MangaListing: React.FC<MangaListingProps> = ({ searchTerm }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const router = useRouter();
   const [totalPages, setTotalPages] = useState(1); // Add totalPages state
+  const [selectedSort, setSelectedSort] = useState("update");
 
   useEffect(() => {
     const fetchManga = async () => {
@@ -36,6 +37,7 @@ const MangaListing: React.FC<MangaListingProps> = ({ searchTerm }) => {
   const handleSortChange = (value: string) => {
     setSortOrder(value);
     setCurrentPage(1); // Reset to first page when sorting changes
+    setSelectedSort(value);
   };
 
   const searchedManga = mangaList.filter((manga) =>
@@ -50,10 +52,42 @@ const MangaListing: React.FC<MangaListingProps> = ({ searchTerm }) => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
   };
 
+  const renderRatingStars = (rating: string) => {
+    const ratingValue = parseFloat(rating);
+    const filledStars = Math.floor(ratingValue / 2); // Determine number of filled stars
+    const hasHalfStar = ratingValue % 2 !== 0; // Check for a half star
+    const maxStars = 5; // Total number of stars
+
+    const stars = [];
+
+    // Add filled stars
+    for (let i = 0; i < filledStars; i++) {
+      stars.push(
+        <Icons.starFilled key={`filled_${i}`} className="h-4 w-4 text-yellow-500 fill-current" />
+      );
+    }
+
+    // Add half star if applicable
+    if (hasHalfStar && filledStars < maxStars) {
+      stars.push(
+        <Icons.starHalf key="half" className="h-4 w-4 text-yellow-500 fill-current" />
+      );
+    }
+
+    // Add empty stars to fill the remaining space
+    while (stars.length < maxStars) {
+      stars.push(
+        <Icons.star key={`empty_${stars.length}`} className="h-4 w-4 text-yellow-500 fill-current" />
+      );
+    }
+
+    return stars;
+  };
+
   return (
     <div className="container mx-auto py-10">
       <div className="flex justify-end items-center mb-4">
-        <Select onValueChange={handleSortChange}>
+        <Select onValueChange={handleSortChange} defaultValue="update">
           <SelectTrigger className="w-[200px]">
             <SelectValue placeholder="Update" />
           </SelectTrigger>
@@ -103,17 +137,7 @@ const MangaListing: React.FC<MangaListingProps> = ({ searchTerm }) => {
               </CardDescription>
               {/* Rating */}
               <div className="flex items-center mt-1">
-                {[...Array(5)].map((_, index) => (
-                  <svg
-                    key={index}
-                    className="h-4 w-4 text-yellow-500 fill-current"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 5.19 8.63 13. 9.24 1.64 13.97 5.82 21 12 17.27z"
-                    />
-                  </svg>
-                ))}
+                {renderRatingStars(manga.rating)}
                 <span className="text-xs text-muted-foreground ml-1">{manga.rating}</span>
               </div>
             </CardContent>
@@ -152,5 +176,4 @@ const MangaListing: React.FC<MangaListingProps> = ({ searchTerm }) => {
 export default MangaListing;
 
 import { CardFooter } from "@/components/ui/card";
-
-
+import { Star, StarHalf } from "lucide-react";
