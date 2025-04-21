@@ -1,5 +1,10 @@
 "use client";
-import { getMangaDetails } from "@/services/asura-scans";
+import {
+  getMangaDetails,
+  MangaDetails,
+  Chapter,
+  Manga,
+} from "@/services/asura-scans";
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
@@ -13,7 +18,9 @@ import Header from "@/components/Header";
 import { cn } from "@/lib/utils";
 
 const MangaDetailsPage = () => {
-  const [mangaDetails, setMangaDetails] = useState(null);
+  const [mangaDetails, setMangaDetails] = useState<
+    MangaDetails | undefined
+  >(undefined);
   const { id } = useParams();
   const router = useRouter();
   const [searchChapter, setSearchChapter] = useState("");
@@ -29,7 +36,7 @@ const MangaDetailsPage = () => {
     fetchMangaDetails();
   }, [id]);
 
-  if (!mangaDetails) {
+  if (mangaDetails === undefined) {
     return <div>Loading...</div>;
   }
 
@@ -191,7 +198,9 @@ const MangaDetailsPage = () => {
           />
 
             <ul className="max-h-[400px] overflow-y-auto">
-              {filteredChapters.map((chapter) => (
+              {filteredChapters.map((chapter: Chapter) => (
+
+
                 <li key={chapter.chapter_id} className="py-2 border-b border-border">
                   <Link
                     href={`/chapter/${chapter.id}/${chapter.chapter_id}`}
@@ -213,7 +222,7 @@ const MangaDetailsPage = () => {
           <div className="mt-8">
             <h2 className="text-2xl font-bold mb-4">Related Series</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-              {mangaDetails.related_series.map((relatedManga) => (
+              {mangaDetails.related_series.map((relatedManga: Manga) => (
                 <Link key={relatedManga.id} href={`/manga/${relatedManga.id}`} passHref>
                   <div className="relative">
                     <Image
