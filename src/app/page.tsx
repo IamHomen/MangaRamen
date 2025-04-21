@@ -1,25 +1,14 @@
-"use client";
-
-import { Suspense } from 'react';
-import { useSearchParams } from "next/navigation";
-import MangaListing from "@/components/MangaListing";
+// app/page.tsx (or app/page.jsx)
+import { Suspense } from "react";
 import Header from "@/components/Header";
-
-
-function ClientComponent() {
-  const searchParams = useSearchParams();
-  const query = searchParams?.get("query") || "";  
-  return (
-    <MangaListing query={query} />
-  );
-}
+import MangaSearchResults from "@/components/MangaSearchResults";
 
 export default function Page() {
   return (
     <>
       <Header />
       <Suspense fallback={<p>Loading...</p>}>
-        <ClientComponent />
+        <MangaSearchResults />
       </Suspense>
     </>
   );
