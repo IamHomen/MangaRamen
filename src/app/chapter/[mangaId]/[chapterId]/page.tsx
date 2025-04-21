@@ -55,7 +55,7 @@ const ChapterReaderPage = () => {
         {/* Manga and Chapter Title */}
         <div className="text-center mb-4">
           <h1 className="text-2xl font-bold">
-            {mangaId} {/* Replace with manga title if available */}
+            {chapterContent.title} {/* Replace with manga title if available */}
           </h1>
           <p className="text-muted-foreground">
             Chapter {chapterContent.currentChapterNumber}
@@ -99,7 +99,7 @@ const ChapterReaderPage = () => {
               alt={`Page ${page.page}`}
               width={800}
               height={1200}
-              className="w-full object-contain mb-4 rounded-md"
+              className="w-11/12 object-contain mb-4 rounded-md"
             />
           ))}
         </div>
