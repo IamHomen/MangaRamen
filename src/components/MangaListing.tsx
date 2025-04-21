@@ -22,6 +22,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
+import React from "react";
 
 interface MangaListingProps {
   // searchTerm: string;
@@ -36,22 +37,27 @@ const MangaListing: React.FC<MangaListingProps> = ({}) => {
   const [selectedSort, setSelectedSort] = useState("update");
 
   const searchParams = useSearchParams();
-  const searchTerm = searchParams.get("keyw") || "";
+  const searchTerm = React.useMemo(() => searchParams.get("keyw") || "", [searchParams]);
+
 
   useEffect(() => {
     const fetchManga = async () => {
       const fetchData = async () => {
-        if (searchTerm) {
-          const data = await getSortedManga(sortOrder, currentPage);
-          const searchedManga = data.results.filter((manga) =>
-            manga.title.toLowerCase().includes(searchTerm.toLowerCase())
-          );
-          setMangaList(searchedManga);
-          setTotalPages(data.hasNextPage ? currentPage + 1 : currentPage);
-        } else {
-          const data = await getSortedManga(sortOrder, currentPage);
-          setMangaList(data.results);
-          setTotalPages(data.hasNextPage ? currentPage + 1 : currentPage);
+        try {
+          if (searchTerm) {
+            const data = await getSortedManga(sortOrder, currentPage);
+            const searchedManga = data.results.filter((manga) =>
+              manga.title.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            setMangaList(searchedManga);
+            setTotalPages(data.hasNextPage ? currentPage + 1 : currentPage);
+          } else {
+            const data = await getSortedManga(sortOrder, currentPage);
+            setMangaList(data.results);
+            setTotalPages(data.hasNextPage ? currentPage + 1 : currentPage);
+          }
+        } catch (error) {
+          console.error("Error fetching manga:", error);
         }
       };
 
@@ -65,14 +71,17 @@ const MangaListing: React.FC<MangaListingProps> = ({}) => {
     setSortOrder(value);
     setCurrentPage(1); // Reset to first page when sorting changes
     setSelectedSort(value);
+    router.push(`/?keyw=${searchTerm}&sort=${value}`, { shallow: true });
   };
 
   const handleNextPage = () => {
     setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
+    router.push(`/?keyw=${searchTerm}&sort=${sortOrder}&page=${currentPage + 1}`, { shallow: true });
   };
 
   const handlePrevPage = () => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+    router.push(`/?keyw=${searchTerm}&sort=${sortOrder}&page=${currentPage - 1}`, { shallow: true });
   };
 
   const renderRatingStars = (rating: string) => {
@@ -84,33 +93,29 @@ const MangaListing: React.FC<MangaListingProps> = ({}) => {
     const stars = [];
 
     // Add filled stars
-    for (let i = 0; i < filledStars; i++) {
-      stars.push(
-        <Icons.starFilled
-          key={`filled_${i}`}
-          className="h-4 w-4 text-yellow-500 fill-current"
-        />
-      );
-    }
-
-    // Add half star if applicable
-    if (hasHalfStar && filledStars < maxStars) {
-      stars.push(
-        <Icons.starHalf
-          key="half"
-          className="h-4 w-4 text-yellow-500 fill-current"
-        />
-      );
-    }
-
-    // Add empty stars to fill the remaining space
-    for (let i = stars.length; i < maxStars; i++) {
-      stars.push(
-        <Icons.star
-          key={`empty_${i}`}
-          className="h-4 w-4 text-yellow-500 fill-current"
-        />
-      );
+    for (let i = 0; i < maxStars; i++) {
+      if (i < filledStars) {
+        stars.push(
+          <Icons.starFilled
+            key={`filled_${i}`}
+            className="h-4 w-4 text-yellow-500 fill-current"
+          />
+        );
+      } else if (hasHalfStar && i === filledStars) {
+        stars.push(
+          <Icons.starHalf
+            key="half"
+            className="h-4 w-4 text-yellow-500 fill-current"
+          />
+        );
+      } else {
+        stars.push(
+          <Icons.star
+            key={`empty_${i}`}
+            className="h-4 w-4 text-yellow-500 fill-current"
+          />
+        );
+      }
     }
 
     return stars;
@@ -121,7 +126,7 @@ const MangaListing: React.FC<MangaListingProps> = ({}) => {
       <div className="flex justify-end items-center mb-4">
         <Select onValueChange={handleSortChange} value={selectedSort}>
           <SelectTrigger className="w-[200px]">
-            <SelectValue placeholder="Sort By" />
+            <SelectValue placeholder="Update" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="update">Update</SelectItem>

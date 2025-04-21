@@ -8,8 +8,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface HeaderProps {}
 
@@ -17,11 +17,32 @@ const Header: React.FC<HeaderProps> = ({}) => {
   const [searchTerm, setSearchTerm] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const sort = searchParams.get("sort") || "update";
+
+  // Debounce function
+  const debounce = (func: (value: string) => void, delay: number) => {
+    let timeoutId: NodeJS.Timeout;
+    return function debounced(value: string) {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      timeoutId = setTimeout(() => {
+        func(value);
+      }, delay);
+    };
+  };
+
+  const pushRouter = (query: string) => {
+    router.push(`/?keyw=${query}&sort=${sort}`, { shallow: true });
+  };
+
+  const debouncedPushRouter = useCallback(debounce(pushRouter, 300), [router, sort]);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
     const query = event.target.value;
-    router.push(`/?keyw=${query}`);
+    setSearchTerm(query);
+    debouncedPushRouter(query);
   };
 
   return (
