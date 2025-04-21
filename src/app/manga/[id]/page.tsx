@@ -9,8 +9,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Bookmark } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import Header from "@/components/Header";
+import { cn } from "@/lib/utils";
 
 const MangaDetailsPage = () => {
   const [mangaDetails, setMangaDetails] = useState(null);
@@ -74,17 +74,13 @@ const MangaDetailsPage = () => {
     )}`;
   };
 
-  const handleHomeClick = () => {
-    router.push("/");
-  };
-
   const filteredChapters = mangaDetails.chapters.filter((chapter) =>
     chapter.name.toLowerCase().includes(searchChapter.toLowerCase())
   );
 
   return (
     <div>
-       <Header />
+      <Header />
       {/* Banner Section */}
       <div className="relative w-full h-64 md:h-96">
         <Image
@@ -193,8 +189,8 @@ const MangaDetailsPage = () => {
             onChange={(e) => setSearchChapter(e.target.value)}
             className="mb-4"
           />
-          <ScrollArea className="max-h-[400px]">
-            <ul>
+
+            <ul className="max-h-[400px] overflow-y-auto">
               {filteredChapters.map((chapter) => (
                 <li key={chapter.chapter_id} className="py-2 border-b border-border">
                   <Link
@@ -209,7 +205,7 @@ const MangaDetailsPage = () => {
                 </li>
               ))}
             </ul>
-          </ScrollArea>
+
         </div>
 
         {/* Related Series */}
@@ -225,7 +221,7 @@ const MangaDetailsPage = () => {
                       alt={relatedManga.title}
                       width={300}
                       height={400}
-                      style={{height: '300px', objectFit: 'cover'}}
+                      style={{ height: '300px', objectFit: 'cover' }}
                       className="w-full object-cover rounded-md"
                     />
                     <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-background to-transparent p-2">
