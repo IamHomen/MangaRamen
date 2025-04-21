@@ -26,7 +26,7 @@ import React from "react";
 import Link from "next/link";
 
 interface MangaListingProps {
-  // searchTerm: string;
+  query?: string;
 }
 
 const MangaListing: React.FC<MangaListingProps> = ({}) => {
@@ -73,17 +73,17 @@ const MangaListing: React.FC<MangaListingProps> = ({}) => {
     setSortOrder(value);
     setCurrentPage(1); // Reset to first page when sorting changes
     setSelectedSort(value);
-    router.push(`/?keyw=${searchTerm}&sort=${value}`, { shallow: true });
+    router.push(`/?keyw=${searchTerm}&sort=${value}`, { scroll: false,  });
   };
 
   const handleNextPage = () => {
     setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
-    router.push(`/?keyw=${searchTerm}&sort=${sortOrder}&page=${currentPage + 1}`, { shallow: true });
+    router.push(`/?keyw=${searchTerm}&sort=${sortOrder}&page=${currentPage + 1}`, { scroll: false,  });
   };
 
   const handlePrevPage = () => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
-    router.push(`/?keyw=${searchTerm}&sort=${sortOrder}&page=${currentPage - 1}`, { shallow: true });
+    router.push(`/?keyw=${searchTerm}&sort=${sortOrder}&page=${currentPage - 1}`, { scroll: false,  });
   };
 
   const renderRatingStars = (rating: string) => {
