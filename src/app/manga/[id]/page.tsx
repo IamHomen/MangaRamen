@@ -98,8 +98,12 @@ const MangaDetailsPage = () => {
         <Image
           src={getProxyImageUrl(mangaDetails.banner)}
           alt={`${mangaDetails.title} Banner`}
-          layout="fill"
-          objectFit="cover"
+          fill
+          sizes="100vw"
+          style={{
+            objectFit: "cover",
+            objectPosition: "center",
+          }}
           className="object-center"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent"></div>
@@ -164,11 +168,18 @@ const MangaDetailsPage = () => {
           <div className="flex justify-between mb-4">
             {mangaDetails.chapters.length > 0 && (
               <Link
-                href={`/chapter/${mangaDetails.id}/${mangaDetails.chapters[mangaDetails.chapters.length - 1].chapter_id}`}
+                href={`/chapter/${mangaDetails.id}/${
+                  mangaDetails.chapters[mangaDetails.chapters.length - 1]
+                    .chapter_id
+                }`}
                 passHref
               >
-                <Button variant="secondary" style={{ backgroundColor: 'green' }}>
-                  First Chapter {mangaDetails.chapters[mangaDetails.chapters.length - 1].name}
+                <Button variant="secondary" className="bg-primary text-primary-foreground">
+                  First Chapter{" "}
+                  {
+                    mangaDetails.chapters[mangaDetails.chapters.length - 1]
+                      .name
+                  }
                 </Button>
               </Link>
             )}
@@ -177,7 +188,7 @@ const MangaDetailsPage = () => {
                 href={`/chapter/${mangaDetails.id}/${mangaDetails.chapters[0].chapter_id}`}
                 passHref
               >
-                <Button variant="secondary" style={{ backgroundColor: 'green' }}>
+                <Button variant="secondary" className="bg-primary text-primary-foreground">
                   New Chapter {mangaDetails.chapters[0].name}
                 </Button>
               </Link>
