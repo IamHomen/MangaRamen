@@ -1,18 +1,23 @@
-"use client";
-
 import MangaListing from "@/components/MangaListing";
 import Header from "@/components/Header";
-import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from 'react';
 
-export default function Home() {
+function ClientComponent() {
+  const searchParams = useSearchParams();
+  const query = searchParams?.get("query") || "";
   return (
-    <div>
+    <MangaListing query={query} />
+  );
+}
+
+export default function Page() {
+  return (
+    <>
       <Header />
-      <div className="container mx-auto py-10 px-4">
-        <Suspense fallback={<p>Loading...</p>}>
-          <MangaListing />
-        </Suspense>
-      </div>
-    </div>
+      <Suspense fallback={<p>Loading...</p>}>
+        <ClientComponent />
+      </Suspense>
+    </>
   );
 }
