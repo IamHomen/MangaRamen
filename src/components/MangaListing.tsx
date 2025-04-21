@@ -121,6 +121,10 @@ const MangaListing: React.FC<MangaListingProps> = ({}) => {
     return stars;
   };
 
+  const getProxyImageUrl = (url: string) => {
+    return `https://homen-api.vercel.app/proxy-image?url=${encodeURIComponent(url)}`;
+  };
+
   return (
     <div className="container mx-auto py-10">
       <div className="flex justify-end items-center mb-4">
@@ -157,21 +161,14 @@ const MangaListing: React.FC<MangaListingProps> = ({}) => {
                   {manga.status}
                 </Badge>
                 {/* Manga Cover Image */}
-                {manga.cover.endsWith(".gif") ? (
-                  <img
-                    src={manga.cover}
-                    alt={manga.title}
-                    className="aspect-[3/4] w-full object-cover rounded-t-md"
-                  />
-                ) : (
-                  <Image
-                    src={manga.cover}
+
+                <Image
+                    src={getProxyImageUrl(manga.cover)}
                     alt={manga.title}
                     width={300}
                     height={400}
                     className="aspect-[3/4] w-full object-cover rounded-t-md"
                   />
-                )}
               </div>
               <CardContent className="p-2 flex flex-col flex-grow">
                 {/* Manga Title */}
