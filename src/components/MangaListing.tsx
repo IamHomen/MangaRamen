@@ -7,6 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface MangaListingProps {
   searchTerm: string;
@@ -17,11 +19,14 @@ const MangaListing: React.FC<MangaListingProps> = ({ searchTerm }) => {
   const [sortOrder, setSortOrder] = useState("update");
   const [currentPage, setCurrentPage] = useState(1);
   const router = useRouter();
+  const [totalPages, setTotalPages] = useState(1); // Add totalPages state
 
   useEffect(() => {
     const fetchManga = async () => {
       const data = await getSortedManga(sortOrder, currentPage);
       setMangaList(data.results);
+      // Update totalPages based on hasNextPage from the API
+      setTotalPages(data.hasNextPage ? currentPage + 1 : currentPage);
     };
 
     fetchManga();
@@ -32,10 +37,17 @@ const MangaListing: React.FC<MangaListingProps> = ({ searchTerm }) => {
     setCurrentPage(1); // Reset to first page when sorting changes
   };
 
-  // Implement search functionality with existing data
   const searchedManga = mangaList.filter((manga) =>
     manga.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
+  };
+
+  const handlePrevPage = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+  };
 
   return (
     <div className="container mx-auto py-10">
@@ -53,30 +65,85 @@ const MangaListing: React.FC<MangaListingProps> = ({ searchTerm }) => {
           </SelectContent>
         </Select>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
         {searchedManga.map((manga) => (
-          <Card key={manga.id} className="bg-background border-border">
-            <CardHeader>
-              <CardTitle>{manga.title}</CardTitle>
-              <CardDescription>
-                Latest Chapter: {manga.latest_chapter}
+          <Card key={manga.id} className="bg-background border-border rounded-md shadow-sm flex flex-col">
+            <div className="relative">
+              {/* Status Badge */}
+              <Badge
+                variant="secondary"
+                className="absolute top-2 left-2 z-10 rounded-full px-2 py-0.5 text-xs font-bold uppercase"
+              >
+                {manga.status}
+              </Badge>
+              {/* Manga Cover Image */}
+              {manga.cover.endsWith(".gif") ? (
+                <img
+                  src={manga.cover}
+                  alt={manga.title}
+                  className="aspect-[3/4] w-full object-cover rounded-t-md"
+                />
+              ) : (
+                <Image
+                  src={manga.cover}
+                  alt={manga.title}
+                  width={300}
+                  height={400}
+                  className="aspect-[3/4] w-full object-cover rounded-t-md"
+                />
+              )}
+            </div>
+            <CardContent className="p-2 flex flex-col flex-grow">
+              {/* Manga Title */}
+              <CardTitle className="text-sm font-semibold line-clamp-1">{manga.title}</CardTitle>
+              {/* Latest Chapter */}
+              <CardDescription className="text-xs text-muted-foreground line-clamp-1">
+                Chapter: {manga.latest_chapter}
               </CardDescription>
-            </CardHeader>
-            <CardContent className="p-0">
-              <Image
-                src={manga.cover}
-                alt={manga.title}
-                width={300}
-                height={200}
-                className="w-full h-48 object-cover rounded-md"
-              />
+              {/* Rating */}
+              <div className="flex items-center mt-1">
+                {/* Star Icons - you might need to use a custom component or library for stars */}
+                {[...Array(5)].map((_, index) => (
+                  <svg
+                    key={index}
+                    className="h-4 w-4 text-yellow-500 fill-current"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 5.19 8.63 13. 9.24 1.64 13.97 5.82 21 12 17.27z"
+                    />
+                  </svg>
+                ))}
+                <span className="text-xs text-muted-foreground ml-1">{manga.rating}</span>
+              </div>
             </CardContent>
-            <CardFooter className="flex items-center justify-between">
-              <Badge variant="secondary">{manga.type}</Badge>
-              <Badge variant="outline">Rating: {manga.rating}</Badge>
+            <CardFooter className="p-2">
+              {/* Type Badge */}
+              <Badge variant="outline" className="text-[0.6rem]">
+                {manga.type}
+              </Badge>
             </CardFooter>
           </Card>
         ))}
+      </div>
+      {/* Pagination */}
+      <div className="flex justify-between items-center mt-4">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handlePrevPage}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleNextPage}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </Button>
       </div>
     </div>
   );
