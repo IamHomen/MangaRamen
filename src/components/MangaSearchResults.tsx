@@ -1,12 +1,24 @@
 // components/MangaSearchResults.tsx
-"use client";
+import { useSearchParams } from "next/navigation"; // Ensure this is imported from the correct Next.js package
+import { Suspense } from "react";
 
-import { useSearchParams } from "next/navigation";
-import MangaListing from "@/components/MangaListing";
+function MangaSearchResultsContent() {
+  const searchParams = useSearchParams();
+  const query = searchParams.get("q"); // Example usage of search params
+
+  return (
+    <div>
+      {/* Render search results based on the query */}
+      <p>Search query: {query}</p>
+      {/* Add more UI logic here */}
+    </div>
+  );
+}
 
 export default function MangaSearchResults() {
-  const searchParams = useSearchParams();
-  const query = searchParams?.get("query") || "";
-  
-  return <MangaListing query={query} />;
+  return (
+    <Suspense fallback={<p>Loading search results...</p>}>
+      <MangaSearchResultsContent />
+    </Suspense>
+  );
 }
