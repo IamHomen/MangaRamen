@@ -1,3 +1,4 @@
+"use client";
 import MangaListing from "@/components/MangaListing";
 import Header from "@/components/Header";
 import { useSearchParams } from "next/navigation";
