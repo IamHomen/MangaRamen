@@ -1,9 +1,9 @@
-"use client";
 import { Suspense } from 'react';
 import { useSearchParams } from "next/navigation";
 import MangaListing from "@/components/MangaListing";
 import Header from "@/components/Header";
 
+"use client";
 function ClientComponent() {
   const searchParams = useSearchParams();
   const query = searchParams?.get("query") || "";  
