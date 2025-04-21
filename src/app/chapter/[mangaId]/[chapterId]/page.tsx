@@ -95,15 +95,16 @@ const ChapterReaderPage = () => {
         {/* Manga Content */}
         <div className="flex flex-col items-center">
           {chapterContent.chapterPages.map((page, index) => (
-            <Image
-              key={index}
-              src={getProxyImageUrl(page.img)}
-              alt={`Page ${page.page}`}
-              width={800}
-              height={1200}
-              style={{ objectFit: "contain" }}
-              className="object-contain"
-            />
+            <div key={index} className="mx-auto max-w-full">
+              <Image
+                src={getProxyImageUrl(page.img)}
+                alt={`Page ${page.page}`}
+                width={800}
+                height={1200}
+                style={{ width: 'auto', height: 'auto' }}
+                className="w-full"
+              />
+            </div>
           ))}
         </div>
 
