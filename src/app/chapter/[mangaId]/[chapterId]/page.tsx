@@ -37,7 +37,7 @@ const ChapterReaderPage = () => {
       <Header />
       <div className="container mx-auto py-10">
         <h1 className="text-2xl font-bold mb-4">Chapter Reader</h1>
-        {chapterContent.chapterPages.map((page, index) => (
+        {chapterContent.chapterPages && chapterContent.chapterPages.map((page, index) => (
           <Image
             key={index}
             src={getProxyImageUrl(page.img)}
