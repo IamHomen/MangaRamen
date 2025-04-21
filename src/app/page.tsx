@@ -1,12 +1,12 @@
 "use client";
+import { Suspense } from 'react';
+import { useSearchParams } from "next/navigation";
 import MangaListing from "@/components/MangaListing";
 import Header from "@/components/Header";
-import { useSearchParams } from "next/navigation";
-import { Suspense } from 'react';
 
 function ClientComponent() {
   const searchParams = useSearchParams();
-  const query = searchParams?.get("query") || "";
+  const query = searchParams?.get("query") || "";  
   return (
     <MangaListing query={query} />
   );
