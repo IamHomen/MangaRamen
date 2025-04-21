@@ -8,7 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 interface HeaderProps {
   onSearchChange: (searchTerm: string) => void;
@@ -16,6 +16,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ onSearchChange }) => {
   const [searchTerm, setSearchTerm] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     onSearchChange(searchTerm);
@@ -23,6 +24,13 @@ const Header: React.FC<HeaderProps> = ({ onSearchChange }) => {
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
+  };
+
+  const handleSubmit = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      onSearchChange(searchTerm);
+    }
   };
 
   return (
@@ -36,7 +44,9 @@ const Header: React.FC<HeaderProps> = ({ onSearchChange }) => {
             placeholder="Search manga..."
             value={searchTerm}
             onChange={handleSearchChange}
+            onKeyDown={handleSubmit}
             className="max-w-md sm:w-64"
+            ref={inputRef}
           />
         </div>
       </div>
