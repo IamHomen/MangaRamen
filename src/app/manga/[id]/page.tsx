@@ -194,7 +194,7 @@ const MangaDetailsPage = () => {
               {filteredChapters.map((chapter) => (
                 <li key={chapter.chapter_id} className="py-2 border-b border-border">
                   <Link
-                    href={`/chapter/${mangaDetails.id}/${chapter.chapter_id}`}
+                    href={`/chapter/${chapter.id}/${chapter.chapter_id}`}
                     className="flex items-center justify-between"
                   >
                     <span>{chapter.name}</span>
