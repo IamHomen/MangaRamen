@@ -8,11 +8,14 @@ import { Icons } from "@/components/icons";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Bookmark } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const MangaDetailsPage = () => {
   const [mangaDetails, setMangaDetails] = useState(null);
   const { id } = useParams();
   const router = useRouter();
+  const [searchChapter, setSearchChapter] = useState("");
 
   useEffect(() => {
     const fetchMangaDetails = async () => {
@@ -74,14 +77,33 @@ const MangaDetailsPage = () => {
     router.push("/");
   };
 
+  const filteredChapters = mangaDetails.chapters.filter((chapter) =>
+    chapter.name.toLowerCase().includes(searchChapter.toLowerCase())
+  );
+
   return (
     <div>
       {/* Header Section */}
-      <header className="bg-background border-b border-border py-4 cursor-pointer" onClick={handleHomeClick}>
+      <header
+        className="bg-background border-b border-border py-4 cursor-pointer"
+        onClick={handleHomeClick}
+      >
         <div className="container mx-auto">
           <div className="text-lg font-bold">Manga Ramen</div>
         </div>
       </header>
+
+      {/* Banner Section */}
+      <div className="relative w-full h-64 md:h-96">
+        <Image
+          src={getProxyImageUrl(mangaDetails.banner)}
+          alt={`${mangaDetails.title} Banner`}
+          layout="fill"
+          objectFit="cover"
+          className="object-center"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent"></div>
+      </div>
 
       <div className="container mx-auto py-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -163,27 +185,62 @@ const MangaDetailsPage = () => {
                 href={`/chapter/${mangaDetails.id}/${mangaDetails.chapters[0].chapter_id}`}
                 passHref
               >
-                <Button variant="secondary">New Chapter {mangaDetails.chapters[0].name}</Button>
+                <Button variant="secondary">
+                  New Chapter {mangaDetails.chapters[0].name}
+                </Button>
               </Link>
             )}
           </div>
-
-          <ul>
-            {mangaDetails.chapters.map((chapter) => (
-              <li key={chapter.chapter_id} className="py-2 border-b border-border">
-                <Link
-                  href={`/chapter/${mangaDetails.id}/${chapter.chapter_id}`}
-                  className="flex items-center justify-between"
-                >
-                  <span>{chapter.name}</span>
-                  <span className="text-sm text-muted-foreground">
-                    {chapter.date}
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <Input
+            type="text"
+            placeholder="Search chapter..."
+            value={searchChapter}
+            onChange={(e) => setSearchChapter(e.target.value)}
+            className="mb-4"
+          />
+          <ScrollArea className="max-h-64">
+            <ul>
+              {filteredChapters.map((chapter) => (
+                <li key={chapter.chapter_id} className="py-2 border-b border-border">
+                  <Link
+                    href={`/chapter/${mangaDetails.id}/${chapter.chapter_id}`}
+                    className="flex items-center justify-between"
+                  >
+                    <span>{chapter.name}</span>
+                    <span className="text-sm text-muted-foreground">
+                      {chapter.date}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </ScrollArea>
         </div>
+
+        {/* Related Series */}
+        {mangaDetails.related_series && mangaDetails.related_series.length > 0 && (
+          <div className="mt-8">
+            <h2 className="text-2xl font-bold mb-4">Related Series</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              {mangaDetails.related_series.map((relatedManga) => (
+                <Link key={relatedManga.id} href={`/manga/${relatedManga.id}`} passHref>
+                  <div className="relative">
+                    <Image
+                      src={getProxyImageUrl(relatedManga.cover)}
+                      alt={relatedManga.title}
+                      width={300}
+                      height={400}
+                      className="w-full object-cover rounded-md"
+                    />
+                    <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-background to-transparent p-2">
+                      <h3 className="text-sm font-semibold">{relatedManga.title}</h3>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
