@@ -101,7 +101,7 @@ const ChapterReaderPage = () => {
               alt={`Page ${page.page}`}
               width={600}
               height={1200}
-              className="w-11/12 object-contain rounded-md"
+              className="w-11/12 object-contain"
             />
           ))}
         </div>
