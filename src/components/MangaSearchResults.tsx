@@ -1,25 +1,16 @@
-"use client"; // Add this directive at the top of the file
+"use client"; // Add this to ensure it's a Client Component
 
 import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
 
-function MangaSearchResultsContent() {
+export default function MangaSearchResults() {
   const searchParams = useSearchParams();
-  const query = searchParams.get("q"); // Example usage of search params
+  const query = searchParams.get("q"); // Example: Retrieve "q" from the query string
 
   return (
     <div>
-      {/* Render search results based on the query */}
+      {/* Render the search query */}
       <p>Search query: {query}</p>
       {/* Add more UI logic here */}
     </div>
-  );
-}
-
-export default function MangaSearchResults() {
-  return (
-    <Suspense fallback={<p>Loading search results...</p>}>
-      <MangaSearchResultsContent />
-    </Suspense>
   );
 }
