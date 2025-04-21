@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Icons } from "@/components/icons";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Bookmark } from "lucide-react";
 
 const MangaDetailsPage = () => {
   const [mangaDetails, setMangaDetails] = useState(null);
@@ -96,7 +97,7 @@ const MangaDetailsPage = () => {
 
             {/* Bookmark Button and Social Sharing (Placeholder) */}
             <Button variant="secondary" className="w-full mb-4">
-              <Icons.bookmark className="mr-2" />
+              <Bookmark className="mr-2" />
               Bookmark
             </Button>
 
